@@ -61,6 +61,10 @@ Minor language changes
   Write is deprecated and renamed to WriteTruncate.
 * C11 Extended Mode variations added to File Modes.
 
+Minor UI changes
+----------------
+* The :e command can now handle an $EDITOR with arguments in it, like "emacs -nw".
+
 New in 0.10:
 ============
 
