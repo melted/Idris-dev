@@ -61,5 +61,8 @@ user_doc_pdf:
 fast:
 	$(CABAL) install $(CABALFLAGS) --ghc-option=-O0
 
+fast_nolib:
+	$(CABAL) install $(CABALFLAGS) --ghc-option=-O0 -fexeconly
+
 dist/setup-config:
 	$(CABAL) configure $(CABALFLAGS)
