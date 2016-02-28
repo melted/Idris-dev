@@ -37,6 +37,9 @@ VM* init_vm(int stack_size, size_t heap_size,
 
     vm->ret = NULL;
     vm->reg1 = NULL;
+
+    vm->callstack = NULL;
+
 #ifdef HAS_PTHREAD
     vm->inbox = malloc(1024*sizeof(VAL));
     memset(vm->inbox, 0, 1024*sizeof(VAL));
@@ -84,6 +87,46 @@ VM* get_vm(void) {
 #else
     return global_vm;
 #endif
+}
+
+void run_idris(VM* vm) {
+    while(callstack_next(vm)) { }
+}
+
+void callstack_alloc(VM* vm) {
+    Callstack* old = vm->callstack;
+    Callstack* stack = malloc(sizeof(Callstack));
+    stack->current = 0;
+    stack->morestack = old;
+    vm->callstack = stack;
+}
+
+void callstack_push(VM* vm, func f, VAL* base) {
+    if (vm->callstack == NULL ||
+        vm->callstack->current > CALLSTACK_SIZE - 2) {
+        callstack_alloc(vm);
+    } else {
+        vm->callstack->current++;
+    }
+    vm->callstack->funcs[vm->callstack->current] = f;
+    vm->callstack->bases[vm->callstack->current] = base;
+}
+
+int callstack_next(VM* vm) {
+    Callstack *stack = vm->callstack;
+    if (stack == NULL) {
+        return 0;
+    }
+    func f = stack->funcs[stack->current];
+    f(vm, stack->bases[stack->current]);
+    if (vm->callstack->current == 0) {
+        Callstack* done = vm->callstack;
+        vm->callstack = done->morestack;
+        free(done);
+    } else {
+        vm->callstack->current--;
+    }
+    return 1;
 }
 
 void close_vm(VM* vm) {

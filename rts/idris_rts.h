@@ -23,6 +23,8 @@
 #define EXIT_FAILURE 1
 #endif
 
+#define CALLSTACK_SIZE 10000
+
 // Closures
 typedef enum {
     CON, INT, BIGINT, FLOAT, STRING, STROFFSET,
@@ -80,6 +82,18 @@ struct Msg_t {
 
 typedef struct Msg_t Msg;
 
+
+// Functions all take a pointer to their VM, and previous stack base,
+// and return nothing.
+typedef void(*func)(struct VM_t*, VAL*);
+
+typedef struct Callstack {
+    func funcs[CALLSTACK_SIZE];
+    VAL* bases[CALLSTACK_SIZE];
+    int current;
+    struct Callstack* morestack;
+} Callstack;
+
 struct VM_t {
     int active; // 0 if no longer running; keep for message passing
                 // TODO: If we're going to have lots of concurrent threads,
@@ -108,6 +122,8 @@ struct VM_t {
 
     VAL ret;
     VAL reg1;
+
+    Callstack* callstack;
 };
 
 typedef struct VM_t VM;
@@ -131,9 +147,6 @@ void close_vm(VM* vm);
 // Set up key for thread-local data - called once from idris_main
 void init_threadkeys();
 
-// Functions all take a pointer to their VM, and previous stack base,
-// and return nothing.
-typedef void(*func)(VM*, VAL*);
 
 // Register access
 
@@ -294,6 +307,10 @@ void idris_freeMsg(Msg* msg);
 
 void dumpVal(VAL r);
 void dumpStack(VM* vm);
+
+void callstack_alloc(VM* vm);
+void callstack_push(VM* vm, func f, VAL*);
+int callstack_next(VM* vm);
 
 // Casts
 #define idris_castIntFloat(x) MKFLOAT(vm, (double)(GETINT(x)))
