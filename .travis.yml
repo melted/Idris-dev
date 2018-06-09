@@ -19,7 +19,7 @@ matrix:
       addons: {apt: {packages: [cabal-install-1.22,ghc-7.10.3,cppcheck,hscolour], sources: [hvr-ghc]}}
   include:
     - env: CABALVER="2.2" GHCVER="8.4.3" STACKVER="7.14" STYLISH=YES
-      addons: {apt: {packages: [cabal-install-2.2,ghc-8.4.3,hscolour], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [cabal-install-2.2,ghc-8.4.1,hscolour], sources: [hvr-ghc]}}
     - env: CABALVER="1.24" GHCVER="8.0.1" TESTS="test_c"
       compiler: ": #GHC 8.0.1"
       addons: {apt: {packages: [cabal-install-1.24,ghc-8.0.1,cppcheck,hscolour], sources: [hvr-ghc]}}
@@ -34,14 +34,14 @@ matrix:
       addons: {apt: {packages: [cabal-install-2.0,ghc-8.2.2,cppcheck,hscolour], sources: [hvr-ghc]}}
     - env: CABALVER="2.2" GHCVER="8.4.3" TESTS="lib_doc doc"
       compiler: ": #GHC 8.4.3"
-      addons: {apt: {packages: [cabal-install-2.2,ghc-8.4.3,cppcheck,hscolour], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [cabal-install-2.2,ghc-8.4.1,cppcheck,hscolour], sources: [hvr-ghc]}}
     - env: CABALVER="2.2" GHCVER="8.4.3" TESTS="test_js"
       compiler: ": #GHC 8.4.3"
-      addons: {apt: {packages: [cabal-install-2.2,ghc-8.4.3,cppcheck,hscolour], sources: [hvr-ghc]}}
+      addons: {apt: {packages: [cabal-install-2.2,ghc-8.4.1,cppcheck,hscolour], sources: [hvr-ghc]}}
     - env: CABALVER="2.2" GHCVER="8.4.3" TESTS="test_c"
       compiler: ": #GHC 8.4.3"
-      addons: {apt: {packages: [cabal-install-2.2,ghc-8.4.3,cppcheck,hscolour], sources: [hvr-ghc]}}
-  fast-finish: true
+      addons: {apt: {packages: [cabal-install-2.2,ghc-8.4.1,cppcheck,hscolour], sources: [hvr-ghc]}}
+#  fast-finish: true
 
 cache:
   directories:
