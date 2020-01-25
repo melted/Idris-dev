@@ -1,5 +1,5 @@
 dist: xenial
-sudo: false
+sudo: required
 
 language: c
 
@@ -51,6 +51,15 @@ before_install:
         export PATH=/opt/ghc/$GHCVER/bin:/opt/cabal/$CABALVER/bin:$HOME/.cabal/bin:$PATH;
         export SED=sed;
         export ZCAT=zcat;
+        if [[ $GHCVER == '8.8.1' ]];
+        then
+          pushd /tmp &&
+          wget https://github.com/libffi/libffi/releases/download/v3.3/libffi-3.3.tar.gz &&
+          tar -xf libffi-3.3.tar.gz &&
+          pushd libffi-3.3  && ./configure && make && 
+          sudo ln -s .libs/libffi.so.7.1.0 /usr/lib/x86_64-linux-gnu/libffi.so.7 && popd &&
+          popd;
+        fi
     fi
   - env
   - if [[ $TRAVIS_OS_NAME == 'osx' ]];
